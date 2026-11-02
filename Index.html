@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КОМПАКТНЫЕ ПРОСТРАНСТВА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+#services {
+            /* Убедимся, что секция занимает всю ширину */
+            width: 100%; 
+            /* Возвращаем стандартные отступы (они заданы глобально для section, но на всякий случай проверим) */
+            padding: 140px 10% 100px; 
+        }
+        :root { --bg-color: #e2e1e0; --text-main: #111111; --text-muted: #666666; --border-color: #000000; --accent-color: #fedd08; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-main); 
+            background-color: var(--bg-color); 
+            
+            /* МЕНЯЕМ СЕТКУ НА КАРТИНКУ: */
+            background-image: url('bg-Menu.jpg'); 
+            background-size: cover; /* Или 'repeat', если картинка бесшовная */
+            background-position: center;
+            background-attachment: fixed; /* Чтобы фон не уезжал при скролле */
+            
+            line-height: 1.6; 
+            overflow-x: hidden; 
+        }
+
+        h1, h2, h3, .logo, .footer-logo { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+   body {
+            /* Добавляем фоновую сетку прямо в body */
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+            background-size: 30px 30px; /* Размер клетки (30x30 пикселей) */
+            background-position: center top;
+        }
+
+
+
+        /* НАВИГАЦИЯ */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(247, 247, 247, 0.95); backdrop-filter: blur(5px); display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; z-index: 1000; border-bottom: 1px solid var(--border-color); }
+        .navbar .logo { height: 100px; display: flex; align-items: center; }
+        .navbar .logo img { height: 100%; width: auto; display: block; }
+        #nav-menu { display: flex; }
+        #nav-menu a { text-decoration: none; color: var(--text-main); margin-left: 40px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; transition: 0.3s; }
+        #nav-menu a:hover { color: var(--accent-color); }
+        .menu-btn { display: none; }
+
+        /* АНИМАЦИИ */
+        .fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+
+        /* СЕКЦИИ */
+        section { padding: 140px 10% 100px; border-bottom: 1px solid var(--border-color); }
+        h2 { font-size: 42px; margin-bottom: 30px; letter-spacing: 1px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+
+        /* HERO */
+        #hero { padding-top: 150px; padding-bottom: 10px; display: flex; justify-content: flex-start; align-items: center; padding-left: 5%; border-bottom: none; }
+        .hero-wrapper { position: relative; width: 100%; max-width: 1900px; aspect-ratio: 20 / 9; margin-right: auto; }
+        /* Общие стили для обеих картинок (накладываем друг на друга) */
+        .hero-bg-img { 
+           
+            top: 0;
+            left: 0;
+            width: 106.2%; 
+            height: 100%; 
+            object-fit: contain; 
+            display: block; 
+        }
+
+        /* По умолчанию (на ПК) скрываем мобильную картинку */
+        .mobile-hero {
+            display: none;
+        }
+
+
+        /* СЛОВА */
+        .hero-animated-words { position: absolute; top: 65%; left: 26.9%; width: 29%; height: 10%; display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 10; }
+        .word-slider { height: 100%; width: 100%; display: flex; justify-content: center; position: relative; overflow: hidden; }
+        .word-track { display: flex; flex-direction: column; width: 100%; animation: slideWords 12s infinite cubic-bezier(0.77, 0, 0.175, 1); }
+        .word-img { height: 100%; width: 100%; object-fit: contain; flex-shrink: 0; display: block; transform: scale(0.9); }
+        @keyframes slideWords {
+            0%, 18% { transform: translateY(0); } 20%, 43% { transform: translateY(-100%); } 45%, 68% { transform: translateY(-200%); } 
+            70%, 93% { transform: translateY(-300%); } 93%, 95% { transform: translateY(-300%); } 97%, 100% { transform: translateY(-400%); } 
+        }
+
+        /* ПЕРСОНАЖ */
+        .hero-character { position: absolute; top: 58%; right: -20%; width: 29%; z-index: 5; }
+        .character-wrapper { position: relative; width: 40%; transform-origin: 50% 100%; animation: breathe 14s ease-in-out infinite; }
+        .character-wrapper img { width: 100%; display: block; }
+        .layer-body { position: relative; z-index: 1; }
+        .head-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; transform-origin: 50% 45%; animation: nodSequence 6s ease-in-out infinite; }
+        .head-container img { position: absolute; top: 0; left: 0; width: 100%; }
+        .layer-eyes { z-index: 3; animation: blink 4s infinite; }
+        @keyframes breathe { 0%, 100% { transform: scaleY(1) translateY(0); } 50% { transform: scaleY(0.985) translateY(2px); } }
+        @keyframes nodSequence { 0%, 30% { transform: rotate(0deg); } 35% { transform: rotate(-3deg); } 45% { transform: rotate(0deg); } 50% { transform: rotate(-3deg); } 55%, 100% { transform: rotate(0deg); } }
+        @keyframes blink { 0%, 88%, 100% { opacity: 1; } 90%, 92% { opacity: 0; } }
+
+        /* ОПЫТ */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
+        .stat-item { border-top: 3px solid var(--text-main); padding-top: 20px; transition: 0.3s; }
+        .stat-item:hover { border-top-color: var(--accent-color); }
+        .stat-item h3 { font-size: 56px; margin-bottom: 10px; line-height: 1; }
+
+        /* КАРУСЕЛЬ */
+        #projects { overflow: hidden; }
+        .slider-wrapper { position: relative; width: 100%; height: 650px; display: flex; justify-content: center; align-items: center; margin-top: 40px; }
+        .project-card {
+            position: absolute; width: 380px; height: 580px; padding: 25px 30px; display: flex; flex-direction: column;
+            background-color: #f4f0e6; border-radius: 16px; outline: 1px solid #dcd3c4; outline-offset: -1px; overflow: hidden; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3), inset 0 0 20px rgba(0,0,0,0.06), inset 0 0 10px rgba(255,255,255,0.8);
+            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.7s ease; cursor: pointer; transform: translateX(0) scale(0.5); opacity: 0; pointer-events: none;
+        }
+        .project-card .card-image { width: 100%; height: 53%; background: #ccc; border-radius: 10px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .perforation { width: calc(100% + 60px); margin-left: -30px; height: 20px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; margin-bottom: 15px; }
+        .hole { width: 20px; height: 20px; background-color: #d1d1d1; border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.9), inset 0 -1px 2px rgba(255,255,255,0.4); }
+        .perforation .hole:first-child { margin-left: -10px; }
+        .perforation .hole:last-child { margin-right: -10px; }
+        .card-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+        .card-info p { font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .card-info h3 { font-family: 'Oswald', sans-serif; font-size: 32px; line-height: 1.1; color: #2b2723; text-transform: uppercase; margin-bottom: 20px; }
+        .bottom-ticket { display: flex; align-items: center; justify-content: space-between; height: 100px; width: 100%; margin-top: auto; gap: 10px; }
+        .logo-slot { height: 100%; flex: 1; display: flex; align-items: center; overflow: hidden; }
+        .logo-slot img { height: 100%; width: 100%; object-fit: contain; object-position: left center; display: block; }
+        .qr-slot { width: 70px; height: 70px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; }
+        .qr-slot canvas, .qr-slot img { width: 70px !important; height: 70px !important; object-fit: contain; }
+        .project-card.active { transform: translateX(0) scale(1); opacity: 1; z-index: 10; pointer-events: auto; }
+        .project-card.visible-side { opacity: 0.4; z-index: 5; pointer-events: auto; }
+        .project-card.hidden { opacity: 0; z-index: 1; pointer-events: none; }
+        .slider-controls { display: flex; justify-content: center; gap: 20px; margin-top: 10px; }
+        .slider-btn { background: transparent; border: 1px solid var(--text-main); width: 60px; height: 60px; border-radius: 50%; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .slider-btn:hover { background: var(--text-main); color: #fff; }        /* УСЛУГИ, КОМАНДА, ПОДВАЛ */
+        .service-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 30px 0; transition: 0.3s; width: 100%; /* Важно: на всю ширину */}
+        .service-item:hover { padding-left: 20px; border-bottom-color: var(--accent-color); }
+        .service-item .num { font-size: 14px; color: var(--text-muted); font-weight: 600; width: 60px; }
+        .service-item .name { flex: 1; font-family: 'Oswald', sans-serif; font-size: 24px; }
+        .service-item .price { font-weight: 600; font-size: 18px; }
+                /* ================= БЛОК КОМАНДЫ (ВИЗИТКА) ================= */
+        .team-container {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr; /* Текст чуть шире визитки */
+            gap: 60px;
+            align-items: center;
+        }
+
+        .team-text h2 {
+            font-size: 70px;
+            margin-bottom: 30px;
+            line-height: 0.9;
+        }
+
+        .team-quote {
+            font-size: 20px;
+            line-height: 1.5;
+            max-width: 500px;
+            margin-bottom: 40px;
+            color: var(--text-main);
+            font-style: italic;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 20px;
+        }
+
+        .team-signature {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .signature-name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 28px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .signature-role {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- ВИЗИТКА --- */
+        .team-card-wrapper {
+            perspective: 1000px; 
+        }
+
+        .team-visiting-card {
+            background-color: #f4f0e6; /* Цвет бумаги (вернули) */
+            width: 100%;
+            max-width: 400px;
+            min-height: 500px; /* Важно: задаем высоту, чтобы фон не пропадал */
+            border-radius: 12px;
+            outline: 1px solid #dcd3c4;
+            outline-offset: -1px;
+            
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.15),           
+                inset 0 0 20px rgba(0,0,0,0.03),       
+                inset 0 0 10px rgba(255,255,255,0.8);
+            
+            position: relative; /* Важно для позиционирования персонажа */
+            overflow: visible;  /* Разрешаем персонажу вылезать */
+            
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease;
+            cursor: default;
+        }
+
+        .visit-card-top {
+            background: var(--accent-color); 
+            width: 100%; /* На всю ширину */
+            height: 200px;
+            border-bottom: 2px dashed #d1c8b8; 
+            position: relative;
+            border-radius: 12px 12px 0 0; /* Скругляем только верхние углы */
+        }
+
+        .visit-avatar {
+            position: absolute;
+            top: -30px;   /* Поднимаем, чтобы голова вылезла вверх */
+            right: -12px;   /* Прижимаем к правому краю (можешь подкрутить на -10px, если нужно) */
+            width: 426px; /* Размер персонажа (подбери, чтобы было похоже на макет) */
+            height: auto;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Эффект наклона при наведении */
+        .team-visiting-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+            box-shadow: 
+                0 40px 80px rgba(0,0,0,0.2),           
+                inset 0 0 20px rgba(0,0,0,0.03),       
+                inset 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        .visit-card-top {
+            /* Вместо желтого фона ставим картинку */
+            background-image: url('visit-bg.jpg'); 
+            background-size: cover;    /* Растягивает картинку, чтобы она заполнила все пространство */
+            background-position: center; /* Центрирует картинку */
+            background-repeat: no-repeat;
+            
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px dashed #d1c8b8; 
+            position: relative;
+        }
+
+        .visit-logo {
+            width: 100%;
+            height: 100%;
+           object-fit: contain; /* Вписывает картинку целиком, не обрезая */
+}
+
+        .visit-card-bottom {
+            padding: 30px;
+        }
+
+        .visit-name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 34px;
+            line-height: 0.9;
+            margin-bottom: 10px;
+            color: #2b2723;
+        }
+
+        .visit-role {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .visit-contacts {
+            font-family: monospace; 
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+        .visit-contacts p {
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        .visit-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .visit-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            background: var(--text-main);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .visit-btn:hover {
+            background: var(--accent-color);
+            color: var(--text-main);
+        }
+        #cta { text-align: center; padding: 150px 20px; background: var(--text-main); color: #fff; }
+        #cta h2 { color: #fff; margin-bottom: 40px; font-size: 50px; }
+        .btn { display: inline-block; padding: 20px 60px; background: var(--accent-color); color: #fff; text-decoration: none; font-family: 'Oswald', sans-serif; font-size: 20px; letter-spacing: 2px; border: none; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: #fff; color: var(--text-main); transform: scale(1.05); }
+        footer { padding: 80px 5% 30px; background: var(--bg-color); border-top: 1px solid var(--border-color); }
+        .footer-logo { font-size: 150px; line-height: 0.8; margin-bottom: 50px; letter-spacing: -5px; }
+        .footer-links { display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 20px; font-size: 14px; color: var(--text-muted); }
+        .clickable-service {
+            /* Убираем старый эффект с цветом и отступом, оставляем только курсор */
+            cursor: pointer;
+            display: inline-block; /* Важно, чтобы увеличение применялось именно к тексту */
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* Плавная анимация */
+            transform-origin: left center; /* Увеличиваем текст от левого края */
+        }
+
+        .clickable-service:hover {
+            transform: scale(1.4); /* Увеличиваем текст на 5% */
+        }
+                /* МОДАЛЬНОЕ ОКНО */
+        .project-modal { 
+            position: fixed; 
+            inset: 0; /* Растягивает на весь экран (замена top/left/width/height) */
+            width: 100%; 
+            height: 100%; /* Вместо 100vh */
+            background: rgba(17,17,17,0.9); 
+            backdrop-filter: blur(10px); 
+            z-index: 2000; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            opacity: 0; 
+            visibility: hidden; 
+            transition: 0.4s; 
+        }
+        .project-modal.active { opacity: 1; visibility: visible; }
+        
+        .modal-content { 
+            background: var(--bg-color); 
+            width: 95vw; 
+            max-width: 1300px; 
+            height: 85vh; 
+            border-radius: 16px; 
+            display: flex; /* На ПК это горизонтальный флекс */
+            flex-direction: row; /* На ПК картинка слева, текст справа */
+            overflow: hidden; 
+            position: relative; 
+            transform: translateY(30px); 
+            transition: 0.4s; 
+        }
+        .project-modal.active .modal-content { transform: translateY(0); }
+        
+        .modal-close { position: absolute; top: 20px; right: 25px; background: transparent; border: none; font-size: 40px; cursor: pointer; z-index: 100; transition: 0.3s; color: #fff; }
+        .modal-close:hover { color: var(--accent-color); transform: rotate(90deg); }
+        
+        .gallery-left { flex: 1.4; position: relative; background: #000; display: flex; flex-direction: column; overflow: hidden; height: 100%; }
+        .gallery-header { position: absolute; top: 30px; left: 30px; z-index: 10; max-width: 80%; }
+        .gallery-header h2 { font-size: 42px; color: white; }
+        .gallery-header p { font-size: 14px; color: #eee; }
+        
+        .slider-container { position: relative; width: 100%; height: 100%; overflow: hidden; }
+        .slider-track { display: flex; height: 100%; width: 100%; transition: transform 0.5s ease; }
+        .slide { min-width: 100%; height: 100%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .slide-bg { position: absolute; inset: -20px; background-size: cover; background-position: center; filter: blur(25px) brightness(0.6); z-index: 1; }
+        .slide img { position: relative; z-index: 2; max-width: 85%; max-height: 85%; object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        
+        .slider-nav { position: absolute; bottom: 30px; right: 40px; display: flex; gap: 15px; z-index: 10; }
+        .nav-btn { width: 55px; height: 55px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); cursor: pointer; font-size: 20px; }
+        .nav-btn:hover { background: var(--accent-color); color: white; }
+        
+        .gallery-right { flex: 1; padding: 60px 50px; overflow-y: auto; display: flex; flex-direction: column; background: var(--bg-color); }
+        .gallery-right h3 { font-size: 28px; margin-bottom: 10px; font-family: 'Oswald'; }
+        .gallery-right .meta { font-size: 12px; color: var(--text-muted); margin-bottom: 30px; border-bottom: 1px solid #ddd; padding-bottom: 15px; }
+        .gallery-right p { font-size: 16px; color: #444; margin-bottom: 20px; }
+        /* ================= НОВЫЙ БЛОК О БЮРО ================= */
+        .about-section {
+            /* Ограничиваем максимальную ширину для 4K и широких мониторов */
+            max-width: 2200px; 
+            width: 90%; /* Занимает 90% экрана, но не больше 2200px */
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 60px; /* Увеличили зазор между колонками */
+            align-items: start; 
+            padding: 120px 0; /* Убрали боковые отступы, так как есть width: 90% */
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .about-left { display: flex; flex-direction: column; justify-content: space-between; height: 100%; /* Растягиваем на всю доступную высоту */ }
+         .about-title { 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 5.5vw; /* Было 70px, стало резиновым */
+            line-height: 0.9; 
+            text-transform: uppercase; 
+            margin-bottom: 1.5vw; 
+            color: var(--text-main); 
+        }
+        .about-desc { 
+            font-size: 1.2vw; /* Было 16px */
+            line-height: 1.5; 
+            max-width: 100vw; 
+            margin-bottom: 3vw; 
+            color: var(--text-muted); 
+        }
+  .about-image { 
+            width: 100%; 
+            flex-grow: 1; /* Картинка растягивается на всё свободное место */
+            min-height: 300px; /* Минимальная высота, чтобы не схлопнулась */
+            object-fit: cover; 
+            display: block; 
+            margin-top: 20px; /* Небольшой отступ от текста */
+        }
+        .about-right {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            grid-template-rows: 1fr 1fr; 
+            border-top: 2px solid var(--border-color);
+            border-left: 2px solid var(--border-color);
+        }
+
+        .grid-cell {
+            border-right: 3px solid var(--text-main); /* Сделали линии еще жирнее */
+            border-bottom: 3px solid var(--text-main);
+            padding: 3vw; /* Отступы зависят от ширины экрана */
+            display: grid;
+            grid-template-columns: 1fr auto; 
+            grid-template-rows: 1fr auto; 
+        }
+
+        .stat-text { 
+            grid-column: 1 / 2; 
+            grid-row: 2 / 3; 
+            align-self: end; 
+            font-size: 1vw; /* Было 14px */
+            line-height: 1.4; 
+            max-width: 12vw; 
+            color: var(--text-muted); 
+        }
+.stat-number { 
+            grid-column: 2 / 3; 
+            grid-row: 2 / 3; 
+            align-self: end; 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 8vw; /* Было 110px. Цифры станут огромными на широком экране */
+            line-height: 0.7; 
+            text-align: right; 
+            color: var(--text-main); 
+        }
+        .carousel-cell {
+            background-color: transparent; 
+            padding: 0px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 800px; 
+        }
+
+        .flip-carousel { width: 100%; height: 100%; transform-style: preserve-3d; }
+        .flip-item {
+            width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+            animation: flipAnimation 8s infinite cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .flip-item img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; backface-visibility: hidden; border-radius: 8px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+        }
+        .flip-item .back { transform: rotateX(180deg); }
+
+        @keyframes flipAnimation {
+            0%, 40%   { transform: rotateX(0deg); }
+            50%, 90%  { transform: rotateX(180deg); }
+            100%      { transform: rotateX(360deg); }
+        }
+                /* ================= МОДАЛКА УСЛУГ ================= */
+        .service-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: 0.4s;
+        }
+        .service-modal.active { opacity: 1; visibility: visible; }
+
+        .service-modal-content {
+            background: #e2e1e0; 
+            width: 90vw; max-width: 800px; height: 85vh; 
+            padding: 10px 20px; /* Уменьшили верхний отступ, чтобы кнопки были выше */
+            border: 2px solid var(--text-main);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            position: relative;
+            transform: translateY(30px); transition: 0.4s;
+            display: flex; flex-direction: column;
+            overflow: hidden; 
+        }
+        .service-modal.active .service-modal-content { transform: translateY(0); }
+
+        .service-modal-close {
+            position: absolute; top: 15px; right: 20px;
+            background: transparent; border: none; font-size: 40px;
+            cursor: pointer; transition: 0.3s; z-index: 100;
+        }
+        .service-modal-close:hover { color: var(--accent-color); transform: rotate(90deg); }
+
+        /* --- 3D-КАРУСЕЛЬ В МОДАЛКЕ --- */
+        .service-flip-wrapper {
+            perspective: 2000px; 
+            width: 100%; height: 100%; 
+            display: flex; flex-direction: column;
+        }
+
+        .service-tabs {
+            display: flex; gap: 10px; margin-bottom: 20px;
+            border-bottom: 2px solid var(--text-main); padding-bottom: 10px;
+            z-index: 10; /* Кнопки поверх карточки */
+        }
+
+        .tab-btn {
+            background: transparent; border: 2px solid var(--text-main);
+            padding: 10px 30px; font-family: 'Oswald', sans-serif; font-size: 18px;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s; color: var(--text-main);
+        }
+        .tab-btn.active { background: var(--text-main); color: #fff; }
+        .tab-btn:not(.active) { color: var(--text-muted); border-color: var(--border-color); }
+        .tab-btn:not(.active):hover { border-color: var(--text-main); color: var(--text-main); }
+
+        .service-flip-card {
+            position: relative; flex-grow: 1; 
+            width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .service-flip-card.flipped { transform: rotateX(180deg); }
+
+        .service-page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            backface-visibility: hidden; 
+            overflow-y: auto; overscroll-behavior: contain; padding-right: 15px; 
+        }
+        .service-page.back { transform: rotateX(180deg); }
+
+        /* Кастомный скроллбар */
+        .service-page::-webkit-scrollbar { width: 6px; }
+        .service-page::-webkit-scrollbar-track { background: transparent; }
+        .service-page::-webkit-scrollbar-thumb { background: #999; border-radius: 10px; }
+
+        /* Текст внутри модалки */
+        .service-menu-logo {
+            font-family: 'Oswald', sans-serif; font-size: 42px; line-height: 0.9;
+            text-align: left; text-transform: uppercase;
+            margin-bottom: 30px; border-bottom: 2px solid var(--text-main); padding-bottom: 15px;
+        }
+        .service-group { margin-bottom: 30px; }
+        .service-group h3 { font-family: 'Oswald', sans-serif; font-size: 24px; text-transform: uppercase; margin-bottom: 15px; }
+        .service-group ul { list-style: none; }
+        .service-group ul.two-columns { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; }
+        .service-group li { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; padding: 8px 0; border-bottom: 1px dotted #999; width: 100%; }
+        /* ================= МОДАЛЬНОЕ ОКНО СВЯЗИ ================= */
+        .contact-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: rgba(226, 225, 224, 0.8); /* Цвет фона с прозрачностью */
+            backdrop-filter: blur(10px);
+            z-index: 3000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: 0.4s;
+        }
+        .contact-modal.active { opacity: 1; visibility: visible; }
+
+        .contact-modal-content {
+            background: var(--bg-color); 
+            width: 90vw; max-width: 500px; 
+            padding: 50px 40px;
+            border: 2px solid var(--text-main);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            position: relative;
+            transform: translateY(30px); transition: 0.4s;
+        }
+        .contact-modal.active .contact-modal-content { transform: translateY(0); }
+
+        .contact-modal-close {
+            position: absolute; top: 15px; right: 20px;
+            background: transparent; border: none; font-size: 40px;
+            cursor: pointer; transition: 0.3s; color: var(--text-main);
+        }
+        .contact-modal-close:hover { color: var(--accent-color); transform: rotate(90deg); }
+
+        .contact-modal-title {
+            font-size: 42px; line-height: 1.0; margin-bottom: 15px;
+        }
+
+        .contact-modal-desc {
+            font-size: 15px; color: var(--text-muted); margin-bottom: 30px;
+        }
+
+        /* Ссылки */
+        .contact-links {
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .contact-link {
+            display: flex; align-items: center; gap: 15px;
+            padding: 15px 20px;
+            background: transparent;
+            border: 2px solid var(--text-main);
+            text-decoration: none; color: var(--text-main);
+            font-family: 'Oswald', sans-serif; font-size: 20px; text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .contact-link:hover {
+            background: var(--text-main);
+            color: #fff;
+            transform: translateX(10px); /* Легкий сдвиг вправо при наведении */
+        }
+
+        .contact-icon {
+            font-size: 24px;
+        }
+
+                        /* МОБИЛЬНАЯ ВЕРСИЯ */
+        @media (max-width: 900px) {
+            .grid-2, .stats-grid, .team-grid { grid-template-columns: 1fr; }
+            /* Адаптив для блока команды */
+            .team-container { 
+                grid-template-columns: 1fr; 
+                gap: 40px; 
+            }
+            /* --- HERO НА ТЕЛЕФОНЕ --- */
+            .desktop-hero {
+                display: none !important; /* Скрываем ПК-версию */
+            }
+/* СЛОВА НА ТЕЛЕФОНЕ */
+            .hero-animated-words { 
+                top: 57% !important;  /* Опускаем или поднимаем (подкрути под свой квадрат) */
+                left: 62% !important; /* Двигаем влево/вправо */
+                width: 43% !important; /* Ширина окна под слова */
+                height: 12% !important; /* Высота окна под слова */
+            }
+            .mobile-hero {
+                display: block !important; /* Показываем телефонную версию */
+                position: absolute !important;
+                top: 0;
+                left: 0;
+                width: 106.2% !important;
+                height: 100% !important;
+                object-fit: contain; /* Картинка вписывается целиком */
+            }
+            
+            /* Обертка должна быть относительной, чтобы картинка не улетала */
+            .hero-wrapper {
+                position: relative;
+                width: 100%;
+                /* Убираем жесткие пропорции, чтобы высота подстроилась под картинку */
+                aspect-ratio: auto !important; 
+                /* Задаем минимальную высоту, чтобы блок не схлопнулся до нуля */
+                min-height: 500px; 
+            }
+            .team-text h2 { font-size: 50px; }
+            .team-quote { font-size: 18px; }
+            .team-visiting-card { margin: 0 auto; }
+            /* Адаптив для нового блока О бюро */
+                        /* ================= НОВЫЙ БЛОК О БЮРО (МОБИЛЬНАЯ ВЕРСИЯ) ================= */
+            .about-section { 
+                display: flex;
+                flex-direction: column;
+                padding: 40px 20px; /* Компактные отступы по бокам и сверху */
+                gap: 0;
+            }
+            
+            .about-left {
+                margin-bottom: 40px; /* Отступ от текста до сетки с цифрами */
+            }
+            
+            .about-title { 
+                font-size: 42px; 
+                line-height: 0.9;
+                margin-bottom: 20px;
+            }
+            
+            .about-desc { 
+                font-size: 16px; 
+                line-height: 1.5;
+                color: var(--text-muted); 
+            }
+            
+            /* Прячем большую картинку (ты просил убрать) */
+            .about-image { 
+                display: none !important; 
+            }
+
+            /* Сетка становится вертикальной */
+            .about-right {
+                display: flex;
+                flex-direction: column;
+                gap: 20px; /* Расстояние между карточками */
+                border: none; /* Убираем внешние рамки сетки */
+            }
+
+            /* Каждая ячейка */
+            .grid-cell {
+                border: 2px solid var(--text-main);
+                padding: 20px;
+                min-height: 200px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .stat-text { 
+                font-size: 14px; 
+                max-width: 100%; 
+                margin-bottom: 0	px;
+            }
+            
+            .stat-number { 
+                font-size: 80px; 
+                text-align: right;
+            }
+
+            /* Блок карусели */
+            .carousel-cell {
+                border: 2px solid var(--text-main);
+                height: 250px;
+                padding: 0;
+                perspective: 1000px;
+            }
+            
+            /* Внутри карусели убираем скругления, чтобы вписалось в квадрат */
+            .flip-item img {
+                border-radius: 0;
+            }
+            .about-title { font-size: 50px; }
+            .about-image { height: 300px; }
+            .about-right { 
+                grid-template-rows: auto auto; 
+            }
+            .grid-cell { padding: 20px; }
+            .stat-number { font-size: 80px; }
+            .carousel-cell { height: 300px; }
+            
+            .navbar { padding: 15px 20px; flex-direction: row; justify-content: space-between; background: var(--bg-color); }
+
+/* ДОБАВЬ ЭТУ СТРОКУ: */
+            .navbar .logo { height: 60px; }
+            /* --- МОБИЛЬНАЯ ВЕРСТКА УСЛУГ --- */
+            .service-item {
+                display: grid;
+                grid-template-columns: 40px 1fr; /* 40px под цифру, остальное под текст */
+                grid-template-rows: auto auto;    /* Две строки: название и цена */
+                gap: 5px 10px;                    /* Отступы между элементами */
+                padding: 20px 0;
+                align-items: center;
+            }
+            /* Увеличиваем межстрочный интервал заголовка */
+            .service-menu-logo {
+                line-height: 1.1 !important; /* Было 0.9, стало 1.1 (добавили воздуха) */
+                font-size: 32px !important;  /* Немного уменьшили шрифт, чтобы влезало в экран */
+                margin-bottom: 20px !important; /* Уменьшили отступ снизу */
+            }
+
+            /* Номер (01, 02...) */
+            .service-item .num {
+                grid-column: 1 / 2;
+                grid-row: 1 / 2; /* Ставим в левый верхний угол */
+                width: auto;
+            }
+
+            /* Название услуги */
+            .service-item .name {
+                grid-column: 2 / 3;
+                grid-row: 1 / 2; /* Ставим справа от цифры */
+                font-size: 20px; /* Чуть уменьшаем шрифт для мобилки */
+                line-height: 1.2;
+                white-space: nowrap; /* Запрещаем перенос на новую строку */
+                overflow: hidden;
+                text-overflow: ellipsis; /* Если не влезет, добавит троеточие... */
+            }
+
+            /* Цена */
+            .service-item .price {
+                grid-column: 2 / 3;
+                grid-row: 2 / 3; /* Опускаем на вторую строку */
+                font-size: 16px;
+                text-align: left;
+                color: var(--text-muted); /* Делаем чуть бледнее, чтобы не спорила с названием */
+            }
+
+            /* Убираем сдвиг текста при наведении (на телефоне нет мышки) */
+            .service-item:hover {
+                padding-left: 0;
+            }
+            
+            /* БУРГЕР-МЕНЮ */
+            .menu-btn { display: flex; flex-direction: column; justify-content: space-between; width: 30px; height: 20px; cursor: pointer; z-index: 1001; }
+            .menu-btn span { display: block; height: 2px; width: 100%; background-color: var(--text-main); transition: 0.3s; }
+            
+            /* ВЫПАДАЮЩЕЕ МЕНЮ */
+            #nav-menu { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: var(--bg-color); flex-direction: column; justify-content: center; align-items: center; transition: right 0.4s; z-index: 1000; }
+            #nav-menu.active { right: 0; }
+            #nav-menu a { margin: 20px 0; font-size: 24px; }
+            
+            /* АНИМАЦИЯ КРЕСТИКА */
+            .menu-btn.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+            .menu-btn.active span:nth-child(2) { opacity: 0; }
+            .menu-btn.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+            /* HERO */
+            #hero { padding-top: 20px; padding-bottom: 0px; padding-left: 0; }
+            .hero-wrapper { width: 100%; max-width: none; }
+            .hero-character { top: 16%; right: -43%; width: 70%; }
+            
+            /* ОСТАЛЬНОЕ */
+            section { padding: 100px 20px 60px; }
+            .slider-wrapper { height: 520px; }
+.slider-controls {
+                margin-top: 40px !important; /* Увеличиваем отступ сверху, чтобы опустить их */
+                margin-bottom: 20px;         /* Добавляем отступ снизу, чтобы было красиво */
+            }
+            .modal-content { flex-direction: column; height: 95vh; width: 95vw; }
+            .gallery-left { flex: none; height: 55%; }
+            .gallery-right { flex: none; height: 45%; padding: 30px 20px; }
+            .modal-close { top: 10px; right: 15px; color: #fff; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        
+            /* ================= МОДАЛКА ПРОЕКТОВ НА ТЕЛЕФОНЕ ================= */}
+}
+            
+            /* Обнуляем стандартную структуру */
+            .modal-content { 
+                flex-direction: column !important; 
+                height: 90vh !important; /* Не 100vh! */
+                width: 95vw !important; 
+                max-width: none !important; 
+                border-radius: 16px !important; 
+            }
+
+            /* Левая часть (галерея) на весь экран */
+            .gallery-left { 
+                flex: none; 
+                height: 100%; 
+                width: 100%; 
+                position: absolute; 
+                top: 0; left: 0; 
+                z-index: 1; 
+            }
+
+            /* Правая часть (текст) выезжает снизу как шторка */
+            .gallery-right { 
+                flex: none; 
+                position: absolute; 
+                bottom: 0; left: 0; 
+                width: 100%; 
+                height: 55%; /* Шторка занимает 55% экрана */
+                background: var(--bg-color); 
+                z-index: 2; 
+                border-radius: 24px 24px 0 0; /* Скругляем верхние углы */
+                padding: 30px 20px; 
+                box-shadow: 0 -10px 30px rgba(0,0,0,0.3); 
+                overflow-y: auto; 
+            }
+
+            /* Настройки текста внутри шторки */
+            .gallery-right h3 { 
+                font-size: 28px; 
+                margin-bottom: 10px; 
+            }
+            .gallery-right .meta { 
+                margin-bottom: 20px; 
+            }
+            .gallery-right .btn { 
+                margin-top: 20px; 
+                width: 100%; 
+                text-align: center; 
+                padding: 15px; 
+            }
+
+            /* Настройки фото, чтобы оно не залезало под шторку */
+            .slide img { 
+                max-width: 90%; 
+                max-height: 50%; /* Уменьшаем фото */
+                margin-top: -30%; /* Сдвигаем фото вверх */
+            }
+
+            /* Заголовок проекта на фото */
+            .gallery-header { 
+                top: 20px; 
+                left: 20px; 
+                width: 90%; 
+            }
+            .gallery-header h2 { 
+                font-size: 32px; 
+            }
+
+            /* Стрелки листания поднимаем над шторкой */
+            .slider-nav { 
+                bottom: 58%; 
+                right: 20px; 
+            }
+
+            /* Крестик закрытия */
+            .modal-close { 
+                position: fixed; 
+                top: 15px; 
+                right: 15px; 
+                color: #fff; 
+                background: rgba(0,0,0,0.5); 
+                width: 40px; 
+                height: 40px; 
+                border-radius: 50%; 
+                z-index: 10; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+            }
+    </style>
+</head>
+<body>
+
+
+
+    <header class="navbar">
+        <div class="logo"><img src="logo_title.png" alt="Логотип"></div>
+        <div class="menu-btn" id="menu-btn"><span></span><span></span><span></span></div>
+        <nav id="nav-menu">
+            <a href="#about">О нас</a>
+            <a href="#projects">Проекты</a>
+            <a href="#services">Услуги</a>
+            <a href="#contact">Контакты</a>
+        </nav>
+    </header>
+
+        <section id="hero">
+        <div class="hero-wrapper">
+            <!-- Картинка для ПК -->
+            <img src="hero-bg.png" alt="Hero Background" class="hero-bg-img desktop-hero">
+            
+            <!-- Картинка для телефона (ВОТ ТУТ БЫЛА ОШИБКА) -->
+            <img src="hero-bg_phone.png" alt="Hero Background Phone" class="hero-bg-img mobile-hero">
+            
+            <div class="hero-character">
+                <div class="character-wrapper">
+                    <img src="body.png" class="layer-body" alt="Тело">
+                    <div class="head-container">
+                        <img src="head.png" alt="Голова">
+                        <img src="eyes.png" class="layer-eyes" alt="Глаза">
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-animated-words">
+                <div class="word-slider">
+                    <div class="word-track">
+                        <img src="word1.png" class="word-img" alt="1">
+                        <img src="word2.png" class="word-img" alt="2">
+                        <img src="word3.png" class="word-img" alt="3">
+                        <img src="word4.png" class="word-img" alt="4">
+                        <img src="word1.png" class="word-img" alt="1">
+                        <img src="word2.png" class="word-img" alt="2">
+                        <img src="word3.png" class="word-img" alt="3">
+                        <img src="word4.png" class="word-img" alt="4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+       <!-- 2. ОПЫТ (НОВЫЙ БЛОК) -->
+    <section id="about" class="about-section">
+        <!-- ЛЕВАЯ ЧАСТЬ -->
+        <div class="about-left">
+            <div>
+                <div class="about-title">Компактные<br>Пространства</div>
+                <div class="about-desc">
+                    
+                </div>
+            </div>
+            <img src="about-photo1.png" class="about-image" alt="Интерьер">
+        </div>
+
+        <!-- ПРАВАЯ ЧАСТЬ (Сетка) -->
+        <div class="about-right">
+            <div class="grid-cell stat-cell">
+                <div class="stat-text">Лет мы создаем уникальные пространства и переосмысливаем правила дизайна.</div>
+                <div class="stat-number">4</div>
+            </div>
+
+            <div class="grid-cell stat-cell">
+                <div class="stat-text">Дизайнеров в команде, которые знают свое дело изнутри и снаружи.</div>
+                <div class="stat-number">20</div>
+            </div>
+
+            <div class="grid-cell percent-cell" style="display: grid; grid-template-columns: 1fr auto; grid-template-rows: 1fr auto;">
+                <div class="stat-text">Завершенных проектов и бесчисленное количество довольных клиентов, которые доверяют нашей работе.</div>
+                <div class="stat-number">62</div>
+            </div>
+
+            <!-- 3D-карусель -->
+            <div class="carousel-cell">
+                <div class="flip-carousel">
+                    <div class="flip-item">
+                        <img src="about-photo2.jpg" alt="1" class="front">
+                        <img src="about-photo3.jpg" alt="2" class="back">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="projects">
+        <h2 class="fade-up" style="text-align: center;">Наши проекты</h2>
+        <div class="slider-wrapper fade-up" id="slider-wrapper">
+            
+            <div class="project-card" data-title="Дом отдыха в Таганроге" data-desc="Описание проекта..." data-prefix="project1" data-photos="3">
+                <img src="project1-photo1.jpg" class="card-image" alt="Проект 1" onerror="this.style.background='#ccc'; this.style.display='none';">
+                <div class="perforation">
+                    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+                    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+                    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+                    <div class="hole"></div>
+                </div>
+                <div class="card-info">
+                    <p>31 — 07 / 2025</p>
+                    <h3>Дом отдыха в Таганроге</h3>
+                    <div class="bottom-ticket">
+                        <div class="logo-slot"><img src="logo.png" alt="Лого" onerror="this.style.display='none';"></div>
+                        <div class="qr-slot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" data-title="Офис Сфера" data-desc="Минимализм..." data-prefix="project2" data-photos="3">
+                <img src="project2-photo1.jpg" class="card-image" alt="Проект 2" onerror="this.style.background='#ccc'; this.style.display='none';">
+                <div class="perforation">
+                    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+                    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+                    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+                    <div class="hole"></div>
+                </div>
+                <div class="card-info">
+                    <p>2026 / Коммерция</p>
+                    <h3>Офис Сфера</h3>
+                    <div class="bottom-ticket">
+                        <div class="logo-slot"><img src="logo.png" alt="Лого" onerror="this.style.display='none';"></div>
+                        <div class="qr-slot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" data-title="Ресторан Терраса" data-desc="Атмосферное освещение..." data-prefix="project3" data-photos="3">
+                <img src="project3-photo1.jpg" class="card-image" alt="Проект 3" onerror="this.style.background='#ccc'; this.style.display='none';">
+                <div class="perforation">
+                    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+                    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+                    <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+                    <div class="hole"></div>
+                </div>
+                <div class="card-info">
+                    <p>2026 / HoReCa</p>
+                    <h3>Ресторан Терраса</h3>
+                    <div class="bottom-ticket">
+                        <div class="logo-slot"><img src="logo.png" alt="Лого" onerror="this.style.display='none';"></div>
+                        <div class="qr-slot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slider-controls fade-up">
+            <button class="slider-btn" id="prevBtn">&#8592;</button>
+            <button class="slider-btn" id="nextBtn">&#8594;</button>
+        </div>
+    </section>
+
+        <section id="services">
+        <h2 class="fade-up">УСЛУГИ И СТОИМОСТЬ</h2>
+        
+        <div class="services-list">
+            <!-- Услуга 1 -->
+            <div class="service-item fade-up">
+                <div class="num">01</div>
+                <div class="name clickable-service" data-service="1" style="cursor: pointer;">Дизайн-проект интерьера</div>
+                <div class="price">от 5 000 ₽/м²</div>
+            </div>
+            
+            <!-- Услуга 2 -->
+            <div class="service-item fade-up delay-1">
+                <div class="num">02</div>
+                <div class="name clickable-service" data-service="2" style="cursor: pointer;">Архитектурное проектирование</div>
+                <div class="price">от 3 000 ₽/м²</div>
+            </div>
+            
+            <!-- Услуга 3 -->
+            <div class="service-item fade-up delay-2">
+                <div class="num">03</div>
+                <div class="name clickable-service" data-service="3" style="cursor: pointer;">Авторский надзор</div>
+                <div class="price">от 2 000 ₽/м²</div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО УСЛУГ (Оно должно быть внутри секции, но вне services-list) -->
+        <div class="service-modal" id="serviceModal">
+            <div class="service-modal-content">
+                <button class="service-modal-close" id="serviceModalClose">&times;</button>
+                
+                <div class="service-flip-wrapper">
+                    <div class="service-tabs">
+                        <button class="tab-btn active" id="tabStandard">Стандарт</button>
+                        <button class="tab-btn" id="tabEconom">Эконом</button>
+                    </div>
+
+                    <div class="service-flip-card" id="serviceFlipCard">
+                        
+                        <!-- СТРАНИЦА 1 (Стандарт) -->
+                        <div class="service-page front">
+                            <h2 class="service-menu-logo" id="modalServiceTitle">Проект</h2>
+                            <div class="service-menu" id="frontContent">
+                                <!-- Сюда скрипт будет вставлять списки -->
+                            </div>
+                        </div>
+
+                        <!-- СТРАНИЦА 2 (Эконом) -->
+                        <div class="service-page back">
+                            <h2 class="service-menu-logo" id="modalServiceTitleBack">Эконом</h2>
+                            <div class="service-menu" id="backContent">
+                                <!-- Сюда скрипт будет вставлять списки -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+            <section id="team">
+        <div class="team-container">
+            
+            <!-- ЛЕВАЯ ЧАСТЬ: ТЕКСТ -->
+            <div class="team-text fade-up">
+                <h2>автор<br>проекта</h2>
+                <p class="team-quote">
+                    «Компактные пространства это объемы и множества имеющие внутринний объем и внешнюю оболочку».
+                </p>
+                <div class="team-signature">
+                    <span class="signature-name">Кирилл Стрельцов</span>
+                    <span class="signature-role">Архитектор и дизайнер интерьера</span>
+                </div>
+            </div>
+
+            <!-- ПРАВАЯ ЧАСТЬ: ВИЗИТКА -->
+            <div class="team-card-wrapper fade-up delay-1">
+                <div class="team-visiting-card">
+                    <!-- Желтый фон -->
+                    <div class="visit-card-top"></div>
+
+                    <!-- Персонаж. Добавили стиль width, чтобы он не был гигантским на телефоне -->
+                    <img src="character-yellow.png" alt="Персонаж" class="visit-avatar" style="width: 100%; max-width: 380px; height: auto; right: 0; position: absolute; top: -30px; z-index: 10;">
+
+                    <!-- Нижняя часть с контактами -->
+                    <div class="visit-card-bottom" style="position: relative; z-index: 20;">
+                        <h3 class="visit-name">СТРЕЛЬЦОВ<br>КИРИЛЛ</h3>
+                        <p class="visit-role">АРХИТЕКТОР / ДИЗАЙНЕР</p>
+                        
+                        <div class="visit-contacts">
+                            <p>+7 (951) 518-39-10</p>
+                            <p>pumphead2000@mail.ru</p>
+                        </div>
+                        
+                        <div class="visit-actions">
+                            <a href="https://t.me/твой_ник" class="visit-btn">Telegram</a>
+                            <a href="https://wa.me/79515183910" class="visit-btn">WhatsApp</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="cta">
+        <h2 class="fade-up">Обсудим ваш проект?</h2>
+        <a href="mailto:hello@archi.buro" class="btn fade-up delay-1">Заказать проект</a>
+    </section>
+
+     <footer>
+        <div class="footer-logo fade-up">Компактные Пространства</div>
+        <div class="footer-links">
+            <span>© 2026 Стрельцов Кирилл</span>
+            <div class="social-links">
+                <a href="https://t.me/Kirill_Str_KH" target="_blank">Telegram</a>
+                <span class="separator">|</span>
+                <a href="https://instagram.com/твой_ник" target="_blank">Instagram</a>
+                <span class="separator">|</span>
+                <a href="https://www.behance.net/kristhenley" target="_blank">Behance</a>
+            </div>
+        </div>
+    </footer>
+
+    
+    <!-- МОДАЛЬНОЕ ОКНО СВЯЗИ -->
+    <div class="contact-modal" id="contactModal">
+        <div class="contact-modal-content">
+            <button class="contact-modal-close" id="contactModalClose">&times;</button>
+            
+            <h2 class="contact-modal-title">Обсудим<br>проект?</h2>
+            <p class="contact-modal-desc">Выберите удобный способ связи, и мы ответим в течение 15 минут.</p>
+            
+             <div class="contact-links">
+                <!-- Почта -->
+                <a href="mailto:pumphead2000@mail.ru" class="contact-link">
+                    <img src="icon-email.png" alt="Почта" class="contact-icon-img">
+                    <span class="contact-text">Написать на почту</span>
+                </a>
+                
+                <!-- Telegram -->
+                <a href="https://t.me/Kirill_Str_KH" target="_blank" class="contact-link">
+                    <img src="icon-telegram.png" alt="Telegram" class="contact-icon-img">
+                    <span class="contact-text">Написать в Telegram</span>
+                </a>
+                
+                <!-- WhatsApp -->
+                <a href="https://wa.me/79515183910" target="_blank" class="contact-link">
+                    <img src="icon-whatsapp.png" alt="WhatsApp" class="contact-icon-img">
+                    <span class="contact-text">Написать в WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </div>
+<div class="project-modal" id="projectModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="gallery-left">
+                <div class="gallery-header">
+                    <h2 id="modalTitle">Название</h2>
+                    <p id="modalMeta">2026 / Архитектура</p>
+                </div>
+                <div class="slider-container" id="sliderContainer">
+                    <div class="slider-track" id="sliderTrack"></div>
+                </div>
+                <div class="slider-nav">
+                    <button class="nav-btn" id="prevSlide">&#8592;</button>
+                    <button class="nav-btn" id="nextSlide">&#8594;</button>
+                </div>
+            </div>
+            <div class="gallery-right">
+                <h3>О проекте</h3>
+                <div class="meta" id="modalMetaRight">Площадь: 145 м² | Локация</div>
+                <p id="modalDesc">Описание</p>
+                <a href="#contact" class="btn" id="modalBtn">Обсудить похожий проект</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. МОБИЛЬНОЕ МЕНЮ
+        const menuBtn = document.getElementById('menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        });
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuBtn.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // 2. АНИМАЦИЯ ПОЯВЛЕНИЯ
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // 3. КАРУСЕЛЬ ПРОЕКТОВ
+        const cards = document.querySelectorAll('.project-card');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+
+        function updateSlider() {
+            const cardWidth = cards[0].offsetWidth + 40; 
+            cards.forEach((card, index) => {
+                card.classList.remove('active', 'visible-side', 'hidden');
+                card.style.transform = ''; 
+                const offset = index - currentIndex;
+                if (offset === 0) {
+                    card.classList.add('active');
+                    card.style.transform = `translateX(0) scale(1)`;
+                } else if (Math.abs(offset) <= 3) { 
+                    card.classList.add('visible-side');
+                    const scale = 1 - (Math.abs(offset) * 0.05);
+                    card.style.transform = `translateX(${offset * cardWidth}px) scale(${scale})`;
+                    if (window.innerWidth < 1200 && Math.abs(offset) > 1) {
+                        card.classList.remove('visible-side');
+                        card.classList.add('hidden');
+                    }
+                } else {
+                    card.classList.add('hidden');
+                    card.style.transform = `translateX(${offset * cardWidth}px) scale(0.5)`;
+                }
+            });
+        }
+
+        nextBtn.addEventListener('click', () => { if (currentIndex < cards.length - 1) { currentIndex++; updateSlider(); } });
+        prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; updateSlider(); } });
+        cards.forEach((card, index) => { card.addEventListener('click', () => { if (index !== currentIndex) { currentIndex = index; updateSlider(); } }); });
+        window.addEventListener('resize', updateSlider);
+        updateSlider();
+
+        // 4. МОДАЛЬНОЕ ОКНО
+        const projectModal = document.getElementById('projectModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMeta = document.getElementById('modalMeta');
+        const modalMetaRight = document.getElementById('modalMetaRight');
+        const modalDesc = document.getElementById('modalDesc');
+        const sliderTrack = document.getElementById('sliderTrack');
+        const sliderContainer = document.getElementById('sliderContainer');
+        let currentSlide = 0;
+        let totalSlides = 0;
+
+        function updateSlide() { sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`; }
+                document.getElementById('nextSlide').addEventListener('click', () => { if (currentSlide < totalSlides - 1) { currentSlide++; updateSlide(); } });
+        document.getElementById('prevSlide').addEventListener('click', () => { if (currentSlide > 0) { currentSlide--; updateSlide(); } });
+
+        let touchStartX = 0;
+        sliderContainer.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        sliderContainer.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50 && currentSlide < totalSlides - 1) { currentSlide++; updateSlide(); }
+            if (touchEndX - touchStartX > 50 && currentSlide > 0) { currentSlide--; updateSlide(); }
+        }, { passive: true });
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                if (card.classList.contains('active')) {
+                    const title = card.getAttribute('data-title');
+                    const desc = card.getAttribute('data-desc');
+                    const prefix = card.getAttribute('data-prefix');
+                    const photos = parseInt(card.getAttribute('data-photos')) || 1;
+
+                    modalTitle.innerHTML = title;
+                    modalMeta.textContent = "2025 / Дизайн интерьера";
+                    modalMetaRight.textContent = `Площадь: 145 м² | Локация: Москва`;
+                    modalDesc.textContent = desc;
+
+                    sliderTrack.innerHTML = '';
+                    totalSlides = photos;
+                    currentSlide = 0;
+
+                    for (let i = 1; i <= totalSlides; i++) {
+                        const imgName = `${prefix}-photo${i}.jpg`; 
+                        sliderTrack.innerHTML += `
+                            <div class="slide">
+                                <div class="slide-bg" style="background-image: url('${imgName}');"></div>
+                                <img src="${imgName}" alt="Фото ${i}" onerror="this.src='https://via.placeholder.com/800x800?text=${imgName}'">
+                            </div>`;
+                    }
+                    
+                    updateSlide();
+                    projectModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        function closeModal() {
+            projectModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        modalClose.addEventListener('click', closeModal);
+        projectModal.addEventListener('click', (e) => { if (e.target === projectModal) closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && projectModal.classList.contains('active')) closeModal(); });
+        document.getElementById('modalBtn').addEventListener('click', closeModal);
+        
+        // ГЕНЕРАЦИЯ QR-КОДОВ
+        document.querySelectorAll('.qr-slot').forEach((slot, index) => {
+            new QRCode(slot, {
+                text: window.location.href.split('#')[0] + `#project${index + 1}`,
+                width: 280, height: 280,
+                colorDark : "#2b2723", colorLight : "#f4f0e6", correctLevel : QRCode.CorrectLevel.L 
+            });
+        });
+        // ДАННЫЕ ДЛЯ ВСЕХ УСЛУГ
+        const servicesData = {
+            1: {
+                title: "Дизайн-проект интерьера",
+                standard: {
+                    groups: [
+                        { title: "Концепция", items: ["01. Консультация", "02. Подбор референсов", "03. Цели проекта"] },
+                        { title: "Рабочая документация", items: ["04. Обмер помещения", "05. План расстановки мебели", "06. План монтажа и демонтажа", "07. План пола", "08. План потолка", "09. План освещения", "10. План розеток", "11. Схема групп света", "12. Развертки помещений", "13. Сантехнический план", "14. 3D Визуализация"] },
+                        { title: "Реализация", items: ["15. Разработка мебели", "16. Авторский надзор", "17. 3D туры"] }
+                    ]
+                },
+                econom: {
+                    groups: [
+                        { title: "Базовый пакет", items: ["01. Консультация", "02. Обмер помещения", "03. План расстановки мебели", "04. План пола", "05. План потолка", "06. План освещения"] }
+                    ]
+                }
+            },
+            2: {
+                title: "Архитектурное проектирование",
+                standard: {
+                    groups: [
+                        { title: "Архитектура", items: ["01. Эскизный проект", "02. Генеральный план", "03. Архитектурные решения", "04. Конструктивные решения"] }
+                    ]
+                },
+                econom: {
+                    groups: [
+                        { title: "Базовый пакет", items: ["01. Эскизный проект", "02. Планировочные решения"] }
+                    ]
+                }
+            },
+            3: {
+                title: "Авторский надзор",
+                standard: {
+                    groups: [
+                        { title: "Надзор", items: ["01. Выезд на объект", "02. Проверка чертежей", "03. Контроль подрядчиков"] }
+                    ]
+                },
+                econom: {
+                    groups: [
+                        { title: "Базовый пакет", items: ["01. Консультация онлайн"] }
+                    ]
+                }
+            }
+        };
+                // МОДАЛЬНОЕ ОКНО УСЛУГ
+        const serviceModal = document.getElementById('serviceModal');
+        const serviceModalClose = document.getElementById('serviceModalClose');
+        const serviceFlipCard = document.getElementById('serviceFlipCard');
+        const tabStandard = document.getElementById('tabStandard');
+        const tabEconom = document.getElementById('tabEconom');
+        
+        // Контейнеры для контента
+        const frontContent = document.getElementById('frontContent');
+        const backContent = document.getElementById('backContent');
+        const modalServiceTitle = document.getElementById('modalServiceTitle');
+        const modalServiceTitleBack = document.getElementById('modalServiceTitleBack');
+
+        // Функция генерации HTML для списков
+        function generateHTML(groups) {
+            let html = '';
+            groups.forEach(group => {
+                html += `<div class="service-group"><h3>${group.title}</h3><ul>`;
+                // Если пунктов больше 5, делаем две колонки
+                const ulClass = group.items.length > 5 ? ' class="two-columns"' : '';
+                if (ulClass) html = html.replace('<ul>', '<ul class="two-columns">');
+                
+                group.items.forEach(item => {
+                    // Разделяем номер и текст
+                    const parts = item.split('. ');
+                    const num = parts[0] + '.';
+                    const text = parts.slice(1).join('. ');
+                    html += `<li><span><strong>${num}</strong> ${text}</span></li>`;
+                });
+                html += `</ul></div>`;
+            });
+            return html;
+        }
+
+                // Открытие модалки по клику на услугу
+        document.querySelectorAll('.clickable-service').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const serviceId = btn.getAttribute('data-service');
+                const data = servicesData[serviceId];
+
+                // Заполняем заголовки
+                modalServiceTitle.innerHTML = `<br>${data.title}`;
+                modalServiceTitleBack.innerHTML = `${data.title}<br>Эконом`;
+
+                // Заполняем контент
+                frontContent.innerHTML = generateHTML(data.standard.groups);
+                backContent.innerHTML = generateHTML(data.econom.groups);
+
+                // === НОВАЯ ЛОГИКА ДЛЯ КНОПКИ ЭКОНОМ ===
+                if (serviceId === "2" || serviceId === "3") {
+                    // Для 2 и 3 услуги прячем кнопку
+                    tabEconom.style.display = 'none';
+                } else {
+                    // Для 1 услуги показываем кнопку
+                    tabEconom.style.display = 'block';
+                }
+                // =======================================
+
+                // Открываем модалку
+                serviceModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                // Сбрасываем на первую страницу
+                serviceFlipCard.classList.remove('flipped');
+                tabStandard.classList.add('active');
+                tabEconom.classList.remove('active');
+            });
+        });
+
+        // Переключение табов
+        tabStandard.addEventListener('click', () => {
+            serviceFlipCard.classList.remove('flipped');
+            tabStandard.classList.add('active');
+            tabEconom.classList.remove('active');
+        });
+
+        tabEconom.addEventListener('click', () => {
+            serviceFlipCard.classList.add('flipped');
+            tabEconom.classList.add('active');
+            tabStandard.classList.remove('active');
+        });
+
+        // Закрытие
+        function closeServiceModal() {
+            serviceModal.classList.remove('active');
+            document.body.style.overflow = '';
+            serviceFlipCard.classList.remove('flipped'); 
+            tabStandard.classList.add('active');
+            tabEconom.classList.remove('active');
+        }
+
+        serviceModalClose.addEventListener('click', closeServiceModal);
+        serviceModal.addEventListener('click', (e) => {
+            if (e.target === serviceModal) closeServiceModal();
+        }); 
+        // МОДАЛЬНОЕ ОКНО СВЯЗИ
+        const contactModal = document.getElementById('contactModal');
+        const contactModalClose = document.getElementById('contactModalClose');
+        const modalBtn = document.getElementById('modalBtn'); // Кнопка в карточке проекта
+        
+        // Находим главную кнопку "Заказать проект"
+        const mainCtaBtn = document.querySelector('#cta .btn'); 
+
+        // Функция открытия
+        function openContactModal(e) {
+            e.preventDefault(); // Отменяем стандартный переход по ссылке (mailto)
+            contactModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Вешаем события на обе кнопки
+        if (mainCtaBtn) mainCtaBtn.addEventListener('click', openContactModal);
+        if (modalBtn) modalBtn.addEventListener('click', openContactModal);
+
+        // Закрытие
+        function closeContactModal() {
+            contactModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        contactModalClose.addEventListener('click', closeContactModal);
+        contactModal.addEventListener('click', (e) => {
+            if (e.target === contactModal) closeContactModal();
+        });
+   
+    </script>
+
+</body>
+</html>
