@@ -28,8 +28,10 @@
             background-attachment: fixed; /* Чтобы фон не уезжал при скролле */
             
             line-height: 1.6; 
-            overflow-x: hidden; 
-        }
+            overflow-x: clip !important; 
+    width: 100vw;
+    position: relative;
+}
 
         h1, h2, h3, .logo, .footer-logo { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
                   body {
