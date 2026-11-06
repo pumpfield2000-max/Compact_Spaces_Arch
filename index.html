@@ -16,12 +16,7 @@
         :root { --bg-color: #e2e1e0; --text-main: #111111; --text-muted: #666666; --border-color: #000000; --accent-color: #fedd08; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body 
-        {
-    /* ... твои существующие стили ... */
-    overflow-x: hidden; /* Запрещает горизонтальную прокрутку */
-}
-        {
+       
             font-family: 'Inter', sans-serif; 
             color: var(--text-main); 
             background-color: var(--bg-color); 
@@ -37,13 +32,16 @@
         }
 
         h1, h2, h3, .logo, .footer-logo { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
-   body {
-            /* Добавляем фоновую сетку прямо в body */
-            background-image: 
-                linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
-            background-size: 30px 30px; /* Размер клетки (30x30 пикселей) */
-            background-position: center top;
+          body {
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-main); 
+            background-color: var(--bg-color); 
+            background-image: url('bg-Menu.jpg'); 
+            background-size: cover; 
+            background-position: center;
+            background-attachment: fixed; 
+            line-height: 1.6; 
+            overflow-x: hidden; /* Запрещает горизонтальную прокрутку */
         }
 
 
